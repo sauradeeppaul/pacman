@@ -96,7 +96,7 @@ def genericSearch(problem, nodes, heuristic = nullHeuristic):
 	from game import Directions
 	"""
 	print "Start:", problem.getStartState()
-	print "heuristic:", heuristic
+	# print "heuristic:", heuristic
 	start = (problem.getStartState(), 0, [])
 	pushToNodeList(nodes, start, 0)
 
@@ -105,36 +105,39 @@ def genericSearch(problem, nodes, heuristic = nullHeuristic):
 	while not nodes.isEmpty():
 		(currentNode, cost, path)=nodes.pop()
 
-		if problem.isGoalState(currentNode):
-			# print "Returned Path: ", path
-			return path
+		if currentNode not in visited:
 
-		visited.append(currentNode)
+			if problem.isGoalState(currentNode):
+				# print "Returned Path: ", path
+				return path
 
-		# print "Current node: ", currentNode
-		# print "Path: ", path
-		# print "successors: ", problem.getSuccessors(currentNode)
+			visited.append(currentNode)
+
+			# print "Current node: ", currentNode
+			# print "Path: ", path
+			# print "successors: ", problem.getSuccessors(currentNode)
 
 
-		if path == None:
-			path = []
+			if path == None:
+				path = []
 
-		for childNode, direction, childCost in problem.getSuccessors(currentNode):
-			if childNode not in visited:
-				newCost = cost + childCost
-				h = newCost + heuristic(childNode, problem)
-				# print "childCost: ", newCost
-				newPath = [p for p in path]
-				newPath.append(direction)
-				# print "adding direction: ", direction
-	
-				# print "nodes: ", nodes.list
+			for childNode, direction, childCost in problem.getSuccessors(currentNode):
+				if childNode not in visited:
+					newCost = cost + childCost
+					h = newCost + heuristic(childNode, problem)
+					# print "childCost: ", newCost
+					newPath = [p for p in path]
+					newPath.append(direction)
+					# print "adding direction: ", direction
+		
+					# print "visited: ", visited
+					# print "checking node: ", childNode
 
-				newState = (childNode, newCost, newPath)
-				pushToNodeList(nodes, newState, h)
-	"""		
-	childNodes = problem.getSuccessors(problem.getStartState())
-	return genericTraversal(problem, problem.getStartState(), childNodes)
+					newState = (childNode, newCost, newPath)
+					pushToNodeList(nodes, newState, h)
+		"""		
+		childNodes = problem.getSuccessors(problem.getStartState())
+		return genericTraversal(problem, problem.getStartState(), childNodes)
 
 
 	
