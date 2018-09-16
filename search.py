@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+import searchAgents
 
 class SearchProblem:
     """
@@ -82,12 +83,20 @@ def genericTraversal(problem, state, childNodes):
 		path = path.append(child[1])
 		return path
 
+def nullHeuristic(state, problem=None):
+    """
+    A heuristic function estimates the cost from the current state to the nearest
+    goal in the provided SearchProblem.  This heuristic is trivial.
+    """
+    return 0
 
-def genericSearch(problem, nodes):
+
+def genericSearch(problem, nodes, heuristic = nullHeuristic):
 	"""
 	from game import Directions
 	"""
 	print "Start:", problem.getStartState()
+	print "heuristic:", heuristic
 	start = (problem.getStartState(), 0, [])
 	pushToNodeList(nodes, start, 0)
 
@@ -113,6 +122,7 @@ def genericSearch(problem, nodes):
 		for childNode, direction, childCost in problem.getSuccessors(currentNode):
 			if childNode not in visited:
 				newCost = cost + childCost
+				h = newCost + heuristic(childNode, problem)
 				# print "childCost: ", newCost
 				newPath = [p for p in path]
 				newPath.append(direction)
@@ -121,7 +131,7 @@ def genericSearch(problem, nodes):
 				# print "nodes: ", nodes.list
 
 				newState = (childNode, newCost, newPath)
-				pushToNodeList(nodes, newState, newCost)
+				pushToNodeList(nodes, newState, h)
 	"""		
 	childNodes = problem.getSuccessors(problem.getStartState())
 	return genericTraversal(problem, problem.getStartState(), childNodes)
@@ -174,17 +184,10 @@ def uniformCostSearch(problem):
     nodes=util.PriorityQueue()
     return genericSearch(problem, nodes)
 
-def nullHeuristic(state, problem=None):
-    """
-    A heuristic function estimates the cost from the current state to the nearest
-    goal in the provided SearchProblem.  This heuristic is trivial.
-    """
-    return 0
-
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    nodes=util.PriorityQueue()
+    return genericSearch(problem, nodes, heuristic)
 
 
 # Abbreviations
