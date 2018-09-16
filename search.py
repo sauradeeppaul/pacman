@@ -59,6 +59,7 @@ class SearchProblem:
         This method returns the total cost of a particular sequence of actions.
         The sequence must be composed of legal moves.
         """
+        print self, ":", actions
         util.raiseNotDefined()
 
 
@@ -72,6 +73,56 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+def genericTraversal(problem, state, childNodes):
+	for child in childNodes:
+		if(isGoalState):
+			return [child[1]]
+
+		path = genericTraversal(problem, child[0], problem.getSuccessors(child[0]))
+		path = path.append(child[1])
+		return path
+
+
+def genericSearch(problem, nodes):
+	"""
+	from game import Directions
+	"""
+	print "Start:", problem.getStartState()
+	start = (problem.getStartState(), 0, [])
+	add_to_stack(nodes, start, 0)
+
+	while not nodes.isEmpty():
+		(currentNode, cost, path)=nodes.pop()
+
+		if problem.isGoalState(currentNode):
+			return path
+
+		for childNodes, direction, childCost in problem.getSuccessors(currentNode):
+			newCost = cost + childCost
+			if path == None:
+				path = []
+			newPath = path.append(direction)
+			newState = (childNodes, newCost, newPath)
+			add_to_stack(nodes, newState, newPath)
+	"""		
+	childNodes = problem.getSuccessors(problem.getStartState())
+	return genericTraversal(problem, problem.getStartState(), childNodes)
+
+
+	
+	s = Directions.SOUTH
+	w = Directions.WEST
+	n = Directions.NORTH
+	e = Directions.EAST
+
+
+	return [s, s, w, e, n, s, w, e, n, s, w, e, n, s, w, e, n, s, w, e, n]
+"""
+	util.raiseNotDefined()
+
+def add_to_stack(stack, state, cost):
+	stack.push(state)
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -81,14 +132,17 @@ def depthFirstSearch(problem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
-
+	"""
     print "Start:", problem.getStartState()
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    
+    nodes=util.Stack()
+    return genericSearch(problem, nodes)
+    
     """
-    "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
-
+	"""
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
