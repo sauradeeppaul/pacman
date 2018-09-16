@@ -89,21 +89,35 @@ def genericSearch(problem, nodes):
 	"""
 	print "Start:", problem.getStartState()
 	start = (problem.getStartState(), 0, [])
-	add_to_stack(nodes, start, 0)
+	pushToNodeList(nodes, start, 0)
+
+	visited = []
 
 	while not nodes.isEmpty():
 		(currentNode, cost, path)=nodes.pop()
 
 		if problem.isGoalState(currentNode):
+			print "Returned Path: ", path
 			return path
 
-		for childNodes, direction, childCost in problem.getSuccessors(currentNode):
-			newCost = cost + childCost
-			if path == None:
-				path = []
-			newPath = path.append(direction)
-			newState = (childNodes, newCost, newPath)
-			add_to_stack(nodes, newState, newPath)
+		visited.append(currentNode)
+
+		print "Current node: ", currentNode
+		print "Path: ", path
+		print "successors: ", problem.getSuccessors(currentNode)
+		
+		if path == None:
+			path = []
+
+		for childNode, direction, childCost in problem.getSuccessors(currentNode):
+			if childNode not in visited:
+				newCost = cost + childCost
+				newPath = [p for p in path]
+				newPath.append(direction)
+				print "adding direction: ", direction
+
+				newState = (childNode, newCost, newPath)
+				pushToNodeList(nodes, newState, 0)
 	"""		
 	childNodes = problem.getSuccessors(problem.getStartState())
 	return genericTraversal(problem, problem.getStartState(), childNodes)
@@ -118,9 +132,9 @@ def genericSearch(problem, nodes):
 
 	return [s, s, w, e, n, s, w, e, n, s, w, e, n, s, w, e, n, s, w, e, n]
 """
-	util.raiseNotDefined()
+	# util.raiseNotDefined()
 
-def add_to_stack(stack, state, cost):
+def pushToNodeList(stack, state, cost):
 	stack.push(state)
 
 def depthFirstSearch(problem):
@@ -145,8 +159,8 @@ def depthFirstSearch(problem):
 	"""
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    nodes=util.Queue()
+    return genericSearch(problem, nodes)
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
