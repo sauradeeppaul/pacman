@@ -95,7 +95,7 @@ def genericSearch(problem, nodes, heuristic = nullHeuristic):
 	"""
 	from game import Directions
 	"""
-	print "Start:", problem.getStartState()
+	# print "Start:", problem.getStartState()
 	# print "heuristic:", heuristic
 	start = (problem.getStartState(), 0, [])
 	pushToNodeList(nodes, start, 0)
