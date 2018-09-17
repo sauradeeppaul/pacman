@@ -363,11 +363,13 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    distance=999999
+    # distance=999999
+    distance = 0
     for currCorner in state[1]:
         tempDistance = util.manhattanDistance(state[0],currCorner)
-        if tempDistance < distance:
-            distance = tempDistance
+        # if tempDistance < distance:
+            # distance = tempDistance
+        distance += tempDistance
 
     return distance
 
