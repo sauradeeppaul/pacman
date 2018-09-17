@@ -107,6 +107,9 @@ def genericSearch(problem, nodes, heuristic = nullHeuristic):
 
 		if currentNode not in visited:
 
+			if path == None:
+				path = []
+
 			if problem.isGoalState(currentNode):
 				# print "Returned Path: ", path
 				return path
@@ -117,9 +120,6 @@ def genericSearch(problem, nodes, heuristic = nullHeuristic):
 			# print "Path: ", path
 			# print "successors: ", problem.getSuccessors(currentNode)
 
-
-			if path == None:
-				path = []
 
 			for childNode, direction, childCost in problem.getSuccessors(currentNode):
 				if childNode not in visited:
