@@ -366,6 +366,12 @@ def cornersHeuristic(state, problem):
     # distance=999999
     distance = 0
     for currCorner in state[1]:
+    	'''
+    	Here the corner heuristic is manhattan distance from the current position 
+    	to the corners that are remaining to be traversed. Hence, traversing a corner
+    	removes that particular distance from the heuristic, leading to a decrease in 
+    	the h-value.
+    	'''
         tempDistance = util.manhattanDistance(state[0],currCorner)
         # if tempDistance < distance:
             # distance = tempDistance
@@ -466,6 +472,28 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
+
+    ''' 
+    We are defining the heuristic as follows:
+    If P is pacman, C is the closest food to Pacman and F is the farthest 
+    food to the pacman, then the heuristic is calculated as 
+    mazeDistance(P, F) - mazeDistance(P, C)
+    This effectively gives us the maze distance between C and F
+    = mazeDistance(F, C)
+
+    This heuristic is admissible because mazeDistance(P,F) actually gives the 
+    distance of Pacman from the goal.
+    Hence,
+    mazeDistance(F, C) = mazeDistance(P,F) - mazeDistance(P, C) <= mazeDistance(P, F)
+
+    So, this heuristic is always less than or equal to the actual goal distance.
+    The advantage that it provides us over other heuristics is that when Pacman 
+    ingests a food particles, C changes and, hence, the distance to the closes food
+    particle changes from 0 to mazeDistance(F, C) > 0. This leads to a sudden decrease 
+    in mazeDistance(F, C). Hence, ingesting a food particle reduces the h-value and thus,
+    going for a food particle actually acts as a incentive for Pacman to further reduce 
+    h-value until it reaches 0.
+    '''
     position, foodGrid = state
     maxDistance, minDistance = 0, 999999
     maxFood, minFood = None, None
