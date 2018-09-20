@@ -73,6 +73,10 @@ class SearchAgent(Agent):
     Note: You should NOT change any code in SearchAgent
     """
 
+    '''
+    This code is for CSE 537 Fall 2018 by Priyanka Sangtani and Sauradeep Paul
+    '''
+
     def __init__(self, fn='depthFirstSearch', prob='PositionSearchProblem', heuristic='nullHeuristic'):
         # Warning: some advanced Python magic is employed below to find the right functions and problems
 
@@ -292,13 +296,19 @@ class CornersProblem(search.SearchProblem):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
+
+        We are defining the current state as the starting position and the corners that 
+        need to be traversed. So we are encoding the remaining corners in the state itself.
         """
+
         return (self.startingPosition, self.corners)
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
+
+        '''A goal state is reached when the length of the remaining corners list reaches 0'''
         if len(state[1]) == 0:
         	return True
         return False

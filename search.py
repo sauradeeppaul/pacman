@@ -12,6 +12,11 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+
+'''
+This code is for CSE 537 Fall 2018 by Priyanka Sangtani and Sauradeep Paul
+'''
+
 """
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
