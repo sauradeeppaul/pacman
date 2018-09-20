@@ -17,6 +17,7 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
+import sys
 import util
 import searchAgents
 
@@ -74,15 +75,6 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def genericTraversal(problem, state, childNodes):
-	for child in childNodes:
-		if(isGoalState):
-			return [child[1]]
-
-		path = genericTraversal(problem, child[0], problem.getSuccessors(child[0]))
-		path = path.append(child[1])
-		return path
-
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
@@ -90,105 +82,77 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
-
+'''Generalized function that is called by all search functions'''
 def genericSearch(problem, nodes, heuristic = nullHeuristic):
-	"""
-	from game import Directions
-	"""
-	# print "Start:", problem.getStartState()
-	# print "heuristic:", heuristic
+	# Initializing the start node with cost 0
 	start = (problem.getStartState(), 0, [])
 	pushToNodeList(nodes, start, 0)
 
 	visited = []
 
+	# Searching till the data structure is empty
 	while not nodes.isEmpty():
 		(currentNode, cost, path)=nodes.pop()
 
+		# Since the graph is undirected we need to maintain a list of visited nodes to create a tree
 		if currentNode not in visited:
 
+			# Initializing path
 			if path == None:
 				path = []
 
+			# Return goal state 
 			if problem.isGoalState(currentNode):
-				# print "Returned Path: ", path
 				return path
 
+			# Add current node to the list of visited nodes
 			visited.append(currentNode)
 
-			# print "Current node: ", currentNode
-			# print "Path: ", path
-			# print "successors: ", problem.getSuccessors(currentNode)
-
-
+			# Looping through non-visited children
 			for childNode, direction, childCost in problem.getSuccessors(currentNode):
 				if childNode not in visited:
+					# Adding cost to previous path cost (g(n))
 					newCost = cost + childCost
+
+					# Calculating h(n) based on the heuristic
 					h = newCost + heuristic(childNode, problem)
-					# print "childCost: ", newCost
+
+					# Adding new node to data structure
 					newPath = [p for p in path]
 					newPath.append(direction)
-					# print "adding direction: ", direction
-		
-					# print "visited: ", visited
-					# print "checking node: ", childNode
-
 					newState = (childNode, newCost, newPath)
 					pushToNodeList(nodes, newState, h)
-		"""		
-		childNodes = problem.getSuccessors(problem.getStartState())
-		return genericTraversal(problem, problem.getStartState(), childNodes)
 
-
-	
-	s = Directions.SOUTH
-	w = Directions.WEST
-	n = Directions.NORTH
-	e = Directions.EAST
-
-
-	return [s, s, w, e, n, s, w, e, n, s, w, e, n, s, w, e, n, s, w, e, n]
-"""
-	# util.raiseNotDefined()
-
+'''Handling push for all data structures'''
 def pushToNodeList(nodes, state, cost):
 	if isinstance(nodes, util.PriorityQueue):
 		nodes.push(state, cost)
 	else:
 		nodes.push(state)
 
+'''DFS with a stack as the data structure to maintain child nodes'''
 def depthFirstSearch(problem):
-    """
-    Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-	"""
     print "Start:", problem.getStartState()
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     
     nodes=util.Stack()
     return genericSearch(problem, nodes)
-    
-    """
-    util.raiseNotDefined()
-	"""
+
+'''BFS with a queue as the data structure to maintain child nodes'''
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
     nodes=util.Queue()
     return genericSearch(problem, nodes)
 
+'''UCS with a priority queue as the data structure to maintain child nodes'''
 def uniformCostSearch(problem):
-    """Search the node of least total cost first."""
     nodes=util.PriorityQueue()
     return genericSearch(problem, nodes)
 
+'''AStar with a priority queue as the data structure to maintain child nodes,
+but also takes in heuristic type as an argument; nullHeuristic effective means
+that AStar acts as UCS'''
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
     nodes=util.PriorityQueue()
     return genericSearch(problem, nodes, heuristic)
 
