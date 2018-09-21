@@ -383,7 +383,7 @@ def cornersHeuristic(state, problem):
     	'''
     	Here the corner heuristic is the sum of the minimum of the euclidean distance from 
     	the current position to the corners that are remaining to be traversed and the 
-    	amximum of the distances between any adjacent corners. Hence, traversing a corner
+    	maximum of the distances between any adjacent corners. Hence, traversing a corner
     	removes that particular distance from the heuristic, leading to a decrease in 
     	the h-value.
     	'''
@@ -506,7 +506,7 @@ def foodHeuristic(state, problem):
 
     ''' 
     We are defining the heuristic as follows:
-    If P is Pacman, F is the farthest food particle from Pacman, 
+    If P is Pacman and F is the farthest food particle from Pacman, 
     then the heuristic is calculated as 
     mazeDistance(P, F)
 
