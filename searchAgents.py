@@ -284,7 +284,7 @@ class CornersProblem(search.SearchProblem):
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height-2, self.walls.width-2
-        self.corners = ((1,1), (1,top), (right, 1), (right, top))
+        self.corners = ((1,1), (1,top), (right, top), (right, 1))
         for corner in self.corners:
             if not startingGameState.hasFood(*corner):
                 print 'Warning: no food in corner ' + str(corner)
@@ -373,21 +373,42 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    # distance=999999
-    distance = 0
+    if len(state[1]) == 0:
+    	return 0
+    pToCDistance = []
+    cToCDistance = []
+    lastCorner = state[1][0]
+
     for currCorner in state[1]:
     	'''
-    	Here the corner heuristic is manhattan distance from the current position 
-    	to the corners that are remaining to be traversed. Hence, traversing a corner
+    	Here the corner heuristic is the sum of the minimum of the euclidean distance from 
+    	the current position to the corners that are remaining to be traversed and the 
+    	amximum of the distances between any adjacent corners. Hence, traversing a corner
     	removes that particular distance from the heuristic, leading to a decrease in 
     	the h-value.
     	'''
-        tempDistance = util.manhattanDistance(state[0],currCorner)
+        pToCDistance.append(util.euclideanDistance(state[0], currCorner))
+        cToCDistance.append(util.manhattanDistance(lastCorner, currCorner))
         # if tempDistance < distance:
             # distance = tempDistance
-        distance += tempDistance
+        # distance += tempDistance
+        lastCorner = currCorner
+        # print "tempDistance ", tempDistance
+    
+	cToCDistance.append(util.manhattanDistance(lastCorner, state[1][0]))
 
-    return distance
+	minPtoC = 999999
+	for x in pToCDistance:
+		if x < minPtoC:
+			minPtoC = x
+
+	maxCtoC = 0
+	for x in cToCDistance:
+		if x > maxCtoC:
+			maxCtoC = x
+
+    return maxCtoC + minPtoC
+
 
 
     # return 0 # Default to trivial solution
