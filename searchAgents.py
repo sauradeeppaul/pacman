@@ -485,39 +485,31 @@ def foodHeuristic(state, problem):
 
     ''' 
     We are defining the heuristic as follows:
-    If P is pacman, C is the closest food to Pacman and F is the farthest 
-    food to the pacman, then the heuristic is calculated as 
-    mazeDistance(P, F) - mazeDistance(P, C)
-    This effectively gives us the maze distance between C and F
-    = mazeDistance(F, C)
+    If P is Pacman, F is the farthest food particle from Pacman, 
+    then the heuristic is calculated as 
+    mazeDistance(P, F)
 
     This heuristic is admissible because mazeDistance(P,F) actually gives the 
-    distance of Pacman from the goal.
-    Hence,
-    mazeDistance(F, C) = mazeDistance(P,F) - mazeDistance(P, C) <= mazeDistance(P, F)
+    distance of Pacman from the most probable goal.
 
     So, this heuristic is always less than or equal to the actual goal distance.
-    The advantage that it provides us over other heuristics is that when Pacman 
-    ingests a food particles, C changes and, hence, the distance to the closes food
-    particle changes from 0 to mazeDistance(F, C) > 0. This leads to a sudden decrease 
-    in mazeDistance(F, C). Hence, ingesting a food particle reduces the h-value and thus,
-    going for a food particle actually acts as a incentive for Pacman to further reduce 
-    h-value until it reaches 0.
     '''
     position, foodGrid = state
-    maxDistance, minDistance = 0, 999999
-    maxFood, minFood = None, None
+    maxDistance = 0
+    maxFood = None
 
     for food in foodGrid.asList():
     	foodDistance = mazeDistance(position, food, problem.startingGameState)
+
     	if foodDistance > maxDistance:
     		maxDistance = foodDistance
     		maxFood = food
-    	elif foodDistance < minDistance:
-    		minDistance = foodDistance
-    		minFood = food
 
-    return maxDistance - minDistance
+    # Case for when all food is finished
+    if len(foodGrid.asList()) == 0:
+    	return 0
+
+    return maxDistance
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"

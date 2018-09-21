@@ -137,9 +137,9 @@ def pushToNodeList(nodes, state, cost):
 
 '''DFS with a stack as the data structure to maintain child nodes'''
 def depthFirstSearch(problem):
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    # print "Start:", problem.getStartState()
+    # print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    # print "Start's successors:", problem.getSuccessors(problem.getStartState())
     
     nodes=util.Stack()
     return genericSearch(problem, nodes)
