@@ -356,6 +356,9 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+def euclideanDistance(xy1, xy2):
+    "The Euclidean distance between points xy1 and xy2"
+    return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
 
 def cornersHeuristic(state, problem):
     """
@@ -387,7 +390,7 @@ def cornersHeuristic(state, problem):
     	removes that particular distance from the heuristic, leading to a decrease in 
     	the h-value.
     	'''
-        pToCDistance.append(util.euclideanDistance(state[0], currCorner))
+        pToCDistance.append(euclideanDistance(state[0], currCorner))
         cToCDistance.append(util.manhattanDistance(lastCorner, currCorner))
         # if tempDistance < distance:
             # distance = tempDistance
